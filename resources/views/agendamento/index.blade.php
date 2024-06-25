@@ -1,6 +1,22 @@
 @extends('web.blank')
 @section('content')
 
+@if (session()->has('negadaExclusao'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire('Exclusão não realizada !', "{{ session('negadaExclusao') }}", 'warning');
+        })
+    </script>
+@endif
+
+@if (session()->has('negadaAlteracao'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire('Alteração não permitida !', "{{ session('negadaAlteracao') }}", 'warning');
+        })
+    </script>
+@endif
+
 <div class="card">
 	<div class="card-header">
 	    <a href="{{ route('agendamento.create') }}" class="btn btn-default" style="float:inline-end">NOVO AGENDAMENTO</a></br></br>

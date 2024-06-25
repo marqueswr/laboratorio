@@ -14,3 +14,4 @@ function confirmarExclusao(event, salaId){
          }
      }))
  }
+

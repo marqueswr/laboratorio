@@ -17,6 +17,14 @@
     </script>
 @endif
 
+@if (session()->has('alteradoSucesso'))
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            Swal.fire('Alterado com sucesso !', "{{ session('alteradoSucesso') }}", 'success');
+        })
+    </script>
+@endif
+
 <div class="card">
 	<div class="card-header">
 	    <a href="{{ route('agendamento.index') }}" class="btn btn-default" style="float:inline-end">VOLTAR PARA LISTAGEM</a></br></br>
@@ -30,17 +38,18 @@
 				<a href="#" class="fa fa-times"></a>
 			</div>
 
-			<h2 class="panel-title alternative-font"><b>NOVO AGENDAMENTO</b></h2>
+			<h2 class="panel-title alternative-font"><b>ALTERAR O AGENDAMENTO</b></h2>
 		</header>
-	<form action="{{ route('agendamento.store') }}" method="POST">
+	<form action="{{ route('agendamento.update',['agendamento'=>$agendamento]) }}" method="POST">
 		@csrf
+		@method('PUT')
 		<div class="panel-body">
 			<label class="col-md-3 control-label text-primary"><b>AULA</b></label>
 			<div class="col-md-12 form-group">
 				<select  name="aula" id="aula" class="form-control" required>
 					<option value="">-- Selecione a aula --</option>  
 					@foreach ($aulas as $aula)
-					<option value="{{ $aula->id }}">
+					<option value="{{ $aula->id }}" {{old('aula_id', $agendamento->aula_id) == $aula->id ? 'selected' : '' }}>
 						{{ $aula->horario }}
 					</option>
 					@endforeach 
@@ -52,7 +61,7 @@
 				<select  name="programa" id="programa" class="form-control" required>
 					<option value="">-- Selecione o programa --</option>   
 					@foreach ($programas as $programa)
-					<option value="{{ $programa->id }}">
+					<option value="{{ $programa->id }}" {{old('programa_id', $agendamento->programa_id) == $programa->id ? 'selected' : '' }}>
 						{{ $programa->nome }} - {{ $programa->informacoes }}
 					</option>
 					@endforeach 
@@ -62,6 +71,7 @@
 			<label class="col-md-3 control-label text-primary "><b>TURNO</b></label>
 			<div class="col-md-12 form-group">
 				<select  name="turno" id="turno" class="form-control" required>
+					<option value="{{ $agendamento->turno }}">{{$agendamento->turno}}</option>  
 					<option value="">-- Selecione o turno --</option>   
 					<option value="matutino">
 						matutino
@@ -75,6 +85,7 @@
 			<label class="col-md-3 control-label text-primary "><b>LABORATÓRIO</b></label>
 			<div class="col-md-12 form-group">
 				<select  name="laboratorio" id="laboratorio" class="form-control" required>
+					<option value="{{ $agendamento->laboratorio }}">{{$agendamento->laboratorio}}</option>  
 					<option value="">-- Selecione o laboratório --</option>   
 					<option value="laboratório 01">
 						Laboratório 01 (menor)
@@ -87,7 +98,7 @@
 
 			<label class="col-md-3 control-label text-primary "><b>DATA</b></label>
 			<div class="col-md-12 form-group">
-				<input type="date" id="dtaaula" name="dtaaula" value="{{ old('dtaaula') }}"   class="form-control" required>
+				<input type="date" id="dtaaula" name="dtaaula" value="{{ $agendamento->dtaaula }}"   class="form-control" required>
 			</div>
 
 			<div class="col-md-12 form-group">
